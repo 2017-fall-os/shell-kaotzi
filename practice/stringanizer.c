@@ -16,7 +16,7 @@ char * copyString(char *string){
     	while(string[index]){
     		copy[index] = string[index];
     		index++;
-		if(string[index]==' ')
+		if(string[index]==delimit)
 		{
 			copy[index]='\0';
 			return copy;//protects from accidental overwritting outside of words scope. 
@@ -46,7 +46,7 @@ int wordCount1(char *input){
  	int words=0;
 	while(input[index]!='\0')
 	{
-		if(input[index]==' ')
+		if(input[index]==delimit)
 			{
 				count=0;
 		}else{
@@ -67,7 +67,7 @@ int letterCount(char *input){
  	int count=0;
 	while(input[index]!='\0')
 	{
-		if(input[index]==' ')
+		if(input[index]==delimit)
 		{
 			return count;
 		}else{
@@ -85,7 +85,7 @@ int letterCount(char *input){
 char **delimTok(char * input, char delim)
 {
   delimit = delim;
-  tokenize(input);
+  return tokenize(input);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////  TOKEN PART/////////////////////////////////////////////////////////////////////////

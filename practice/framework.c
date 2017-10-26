@@ -13,7 +13,7 @@ char *getInput(void)
   int bufferSize = 256;
   char *buffer = malloc(sizeof(char) * bufferSize);
   int bufCount = read(0,buffer,256);	
-	printf("buffer size was %i and the letter replaced was %c", bufCount, buffer[bufCount-1]);  
+	//printf("buffer size was %i and the letter replaced was %c", bufCount, buffer[bufCount-1]);  
 
 buffer[bufCount-1]='\0';
 return buffer;
@@ -33,43 +33,48 @@ int main(int argc, char **argv,char **envp)
 
   char **enviroment ;
   char **activeLine;
-  int enviroCount;
+  int enviroCount=0;
   int escapeClause = 1;
   int index=0;
 printf("point 1 reached\n");
-  while(0<escapeClause)
-    {
+  while(0<escapeClause) {
       activeLine=delimTok(envp[enviroCount],'=');
       if(activeLine){
-      if(activeLine[0]=="$PATH")
-	{
-	printf("point 2 reached\n");	
-	   enviroment=delimTok(activeLine[1],';');
-	}
-       }else{escapeClause=0;}
-
-	enviroCount++;
+	//printf("arg0 is%s\n", activeLine[0]);	
+      	if(!compare(activeLine[0],"PATH")) {
+	  printf("point 2 reached\n");	
+	  enviroment=delimTok(activeLine[1],':');
+	  escapeClause=0;
+        }
+      } else
+        escapeClause=0;
+      enviroCount++;
       index++;
-    }
+  }
 
-
+//char* test = "Help=Me=Please";
 
   do {
 printf("point 3 reached\n");
     write(1,"$ ",2);
     input = getInput();
     //printf("address:%s\n",envp);
-printAll(enviroment);
+//printAll(enviroment);
     tokens = tokenize(input);
-printAll(tokens);
+printf("Your enviromental variables are:\n");
+printAll(enviroment);
     //status = lsh_execute(tokens);
-	inc+=1;
-     printf("\nthe value of string 1 and 2 was: %s",input);
+	//inc+=1;
+     //printf("\nthe value of string 1 and 2 was: %s",input);
         continuation=compare(tokens[0],"exit\0");
-	printf("the value of cont was: %i :yep..",continuation);
-	printf("\nthe first token was: %s\n",tokens[0]);
+	//printf("the value of cont was: %i :yep..",continuation);
+	//printf("\nthe first token was: %s\n",tokens[0]);
     //free(line);
     //free(args);
+      
+     //printf("the test phrase was:\n");
+	//printAll(delimTok(test,'='));
+
   } while (continuation);
 
 
