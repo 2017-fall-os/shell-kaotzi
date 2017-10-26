@@ -19,156 +19,7 @@ buffer[bufCount-1]='\0';
 return buffer;
 }
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-//tokenizer stuff
-////////////////////////////////////////////////////////
-int letterCount(char *);
 
-
-//this is a method to copy strings inpired by Ana Garcia
-char * copyString(char *string){
-    	int length = letterCount(string);
-	char * copy = (char *)malloc(length+1);
-    	int index = 0;
-    	while(string[index]){
-    		copy[index] = string[index];
-    		index++;
-		if(string[index]==' ')
-		{
-			copy[index]='\0';
-			return copy;//protects from accidental overwritting outside of words scope. 
-		}
-	
-    	}
-	copy[length]='\0';
-	return copy;
-}
-
-
-//simple print command to get a full string printed to the screen
-int printIt(char *input){
- 	int index =0;
-	while(input[index]!='\0')
-	{
-		printf("%c",input[index]);fflush(stdout);
-		index++;
-    	}
-	printf("\n");
-}
-
-//counts the different words to be tokenized
-int wordCount1(char *input){
-	int index =0;
- 	int count=0;
- 	int words=0;
-	while(input[index]!='\0')
-	{
-		if(input[index]==' ')
-			{
-				count=0;
-		}else{
-			if(count==0)
-				{
-					words++;
-				}		
-			count++;
-		}
-	index++;
-    	}
-	return words;
-}
-
-//this returns the count of letters used in a single word. NOTE must start with a none space symbol
-int letterCount(char *input){
- 	int index =0;
- 	int count=0;
-	while(input[index]!='\0')
-	{
-		if(input[index]==' ')
-		{
-			return count;
-		}else{
-			count++;
-		}
-	index++;
-    	}
-	return count;
-}
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////  TOKEN PART/////////////////////////////////////////////////////////////////////////
-
-
-
-
-char **tokenize(char * input)
-{
-  int words = wordCount1(input);
- char **toks = (char **)malloc(sizeof(char*)*(words+1));
- 
-//time to fill out the array
-int index =0;
- 	int count=0;
- 	int wordses=0;
-	
-	while(wordses<words)
-	{
-		//printf("index = %i, count = %i, wordses = %i\n",index,count,wordses);fflush(stdout);
-		if(input[index]==' ')
-			{
-				
-				count=0;
-		}else{
-			if(count==0)
-				{
-					//printf("hi");fflush(stdout);
-					char *tmp= copyString(input+index);
-					//printIt(tmp);					
-					toks[wordses]=tmp;
-					wordses++;
-				}		
-			count++;
-		}
-	index++;
-    	}
-	//char *nool ='\0';
-	
-char * end = (char *)malloc(1);
-end[0]='\0';
-toks[words]= end;
-return toks;
-
-}
-
-
-
-//simple print command to get a full string printed to the screen
-int printAll(char **input){
- 	int index =0;
-printf("\nyour table prints this: \n");fflush(stdout);
-	while(*input[index]!='\0'&&input[index]!=NULL)
-	{ 
-		printIt(input[index]);
-		index++;
-    	}
-}
-
-
-int compare(char* word1, char* word2){
-int wordLength = letterCount(word1); 
-for(int i=0;i<wordLength;i++){
-	if(word2[i]=='\0')
-		return -1;
-
-	if(word1[i]!=word2[i])
-		return 1;
-}
-return 0;
-}
 
 ///////////////////////////////////////////////////////
 //this is the main. 
@@ -180,11 +31,35 @@ int main(int argc, char **argv,char **envp)
   int continuation=0;
   int inc;
 
+  char **enviroment ;
+  char **activeLine;
+  int enviroCount;
+  int escapeClause = 1;
+  int index=0;
+printf("point 1 reached\n");
+  while(0<escapeClause)
+    {
+      activeLine=delimTok(envp[enviroCount],'=');
+      if(activeLine){
+      if(activeLine[0]=="$PATH")
+	{
+	printf("point 2 reached\n");	
+	   enviroment=delimTok(activeLine[1],';');
+	}
+       }else{escapeClause=0;}
+
+	enviroCount++;
+      index++;
+    }
+
+
+
   do {
+printf("point 3 reached\n");
     write(1,"$ ",2);
     input = getInput();
     //printf("address:%s\n",envp);
-printAll(envp);
+printAll(enviroment);
     tokens = tokenize(input);
 printAll(tokens);
     //status = lsh_execute(tokens);

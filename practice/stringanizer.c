@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "stringanizer.h"
 //this is header stuff
+char **tokenize(char * input);
 int letterCount(char *);
+char delimit = ' ';
 
 
 //this is a method to copy strings inpired by Ana Garcia
@@ -77,7 +80,13 @@ int letterCount(char *input){
 
 
 
-
+///////////////////////////////
+/////////helper class/////////
+char **delimTok(char * input, char delim)
+{
+  delimit = delim;
+  tokenize(input);
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////  TOKEN PART/////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +106,7 @@ int index =0;
 	while(wordses<words)
 	{
 		//printf("index = %i, count = %i, wordses = %i\n",index,count,wordses);fflush(stdout);
-		if(input[index]==' ')
+		if(input[index]==delimit)
 			{
 				
 				count=0;
@@ -142,21 +151,18 @@ printf("\nyour table prints this: \n");fflush(stdout);
 }
 
 
-/*
-//the main deal
-int main()
-{
-    char string[] = "    the brown   fox jumps   \0";
-    char *activeWord=copyString(string);
-      
-	//printIt(string);
-	//printIt(activeWord);
-	char **names=tokenize(string);
-	printAll(names);
-	//printIt(names[0]);
-	//printIt(names[1]);	
+//compare method
+int compare(char* word1, char* word2){
+int wordLength = letterCount(word1); 
+for(int i=0;i<wordLength;i++){
+	if(word2[i]=='\0')
+		return -1;
 
-    
-    //printf("end found");
-    return 0;
-}*/
+	if(word1[i]!=word2[i])
+		return 1;
+}
+return 0;
+}
+
+
+
