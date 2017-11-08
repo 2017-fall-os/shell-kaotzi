@@ -11,6 +11,7 @@ char **mytok(char *input, char delim);
 char **tokenize(char *input);
 int compare(char *word1, char *word2);
 int makeFree(char **input);
+char *joinString(char *prefix,char *suffix);
 
 
 

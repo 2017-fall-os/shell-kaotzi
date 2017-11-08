@@ -78,6 +78,44 @@ int letterCount(char *input){
 	return count;
 }
 
+
+char *joinString(char *prefix,char *suffix)
+{
+    int totalLength=letterCount(prefix);
+    totalLength += letterCount(suffix);
+    //printf("length of string is currently set to: %i",length);
+    char * copy = (char *)malloc(totalLength);
+    int index = 0;
+    int totalIndex =0;
+    while(prefix[index])
+    {// writes prefix first
+        copy[totalIndex] = prefix[index];
+        index++;
+        if(prefix[index]!=delimit)
+        {
+	    totalIndex++;
+	}
+	
+    }
+    //copy[totalIndex] ='/';
+    //totalIndex++;
+    index=0;
+    while(suffix[index])
+    {
+        copy[totalIndex] = suffix[index];
+    	index++;
+        if(suffix[index]!=delimit)
+        {
+	    totalIndex++;
+	}
+	
+	
+    }
+
+    copy[totalLength]='\0';
+    return copy;
+
+}
 ///////////////////////////////
 /////////helper class/////////
 char **mytok(char * input, char delim)

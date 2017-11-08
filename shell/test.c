@@ -34,23 +34,26 @@ int main(int argc, char **argv,char **envp)
  
   char *input;
   char **tokens;
-  int continuation=0;
+  int continuation=1;
   int inc;
+  int lineIndex=0;
 
 
-// all the fiollowing code is used to set the enviroemnt variables to an array i can use. they are pulled from the envp and path is parsed and stored. 
-  char **enviroment ;
+// all the following code is used to set the enviroment variables to an array i can use. they are pulled from the envp and path is parsed and stored. 
+  char **path ;
   char **activeLine;
   int enviroCount=0;
   int escapeClause = 1;
   int index=0;
+  char *directCommand;
+  char **parsedCommands;
  printf("point 1 reached\n");
   while(0<escapeClause) {
       activeLine=mytok(envp[enviroCount],'=');
       if(activeLine){
       	if(!compare(activeLine[0],"PATH")) {
 	  printf("point 2 reached\n");	
-	  enviroment=mytok(activeLine[1],':');
+	  path=mytok(activeLine[1],':');
 	  escapeClause=0;
         }
       } else
@@ -60,20 +63,41 @@ int main(int argc, char **argv,char **envp)
   }
 
 
-////////////////////////////////////////
-// SHELL START ///////////////////////
 ///////////////////////////////////////
-  do {
+// SHELL START ////////////////////////
+///////////////////////////////////////
+  do 
+  {
     write(1,"$ ",2);
     input = getInput();
-    tokens = tokenize(input);
 ////////////logics of shell//////////////
-    printf("tokens are:\n");
-    printAll(tokens);
-    printf("enviroments are:\n");
-    printAll(enviroment);
-    continuation=compare(tokens[0],"exit\0"); 
-  } while (continuation);
+    parsedCommands=mytok(input,' ');
+    directCommand=parsedCommands[0];
+    if(compare(directCommand,"exit\0"))
+    {//if we aren't exiting
+      if(!compare(directCommand,"cd"))
+      {//if its a cd command change dir
+        int rtn=chdir(parsedCommands[1]);
+        if(rtn<0) perror("ERROR");
+      }
+      execve(directCommand,parsedCommands,path);
+      int pathIndex=0;
+      while(*path[pathIndex])
+      {
+         //printf("printIt %s\n",path[pathIndex]);
+         char *tmp=joinString(path[pathIndex],"/");
+         //printf("preeee %s\n",tmp);
+         tmp = joinString(tmp,directCommand);
+         printf("printIt %s\n",tmp);
+	 //execve(tmp,parsedCommands,envp);
+         //free(tmp);
+         pathIndex++;
+      }
+    }else
+    {
+      continuation=0;
+    }
+  }while(continuation);
   return EXIT_SUCCESS;
 }
 
