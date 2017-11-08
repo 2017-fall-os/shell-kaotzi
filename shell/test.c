@@ -80,17 +80,14 @@ int main(int argc, char **argv,char **envp)
         int rtn=chdir(parsedCommands[1]);
         if(rtn<0) perror("ERROR");
       }
-      execve(directCommand,parsedCommands,path);
+      execve(directCommand,&parsedCommands[1],envp);
       int pathIndex=0;
       while(*path[pathIndex])
       {
-         //printf("printIt %s\n",path[pathIndex]);
          char *tmp=joinString(path[pathIndex],"/");
-         //printf("preeee %s\n",tmp);
          tmp = joinString(tmp,directCommand);
-         printf("printIt %s\n",tmp);
-	 //execve(tmp,parsedCommands,envp);
-         //free(tmp);
+         execve(tmp,parsedCommands,envp);
+         free(tmp);
          pathIndex++;
       }
     }else

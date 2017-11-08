@@ -157,9 +157,7 @@ int index =0;
     	}
 	//char *nool ='\0';
 	
-char * end = (char *)malloc(1);
-end[0]='\0';
-toks[words]= end;
+toks[words]= 0;//end;
 return toks;
 
 }
