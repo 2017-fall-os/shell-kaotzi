@@ -10,57 +10,92 @@
  */
 char *getInput(void)
 {
-    int bufferSize = 256;
-    char *buffer = malloc(sizeof(char) * bufferSize);
-    int bufCount = read(0,buffer,256);
-    buffer[bufCount-1]='\0';
-    return buffer;
+  int bufferSize = 256;
+  char *buffer = malloc(sizeof(char) * bufferSize);
+  int bufCount = read(0,buffer,256);	
+buffer[bufCount-1]='\0';
+return buffer;
 }
 
 
 
 int printFormatter(char *input)
 {
-    char **tokens = tokenize(input);
-    printf("tokens are:\n");
-    printAll(tokens);
+char **tokens = tokenize(input);
+printf("tokens are:\n");
+printAll(tokens);
 
 }
 
 ///////////////////////////////////////////////////////
-//this is the main.
+//this is the main. 
 int main(int argc, char **argv,char **envp)
 {
+ 
+  char *input;
+  char **tokens;
+  int continuation=1;
+  int inc;
+  int lineIndex=0;
 
-    char *input;
-    char **tokens;
-    int continuation=0;
-    int inc;
 
-    char **enviroment ;
-    char **activeLine;
-    int enviroCount=0;
-////////////////////////////////////////
-// TESTING AREA ///////////////////////
+// all the following code is used to set the enviroment variables to an array i can use. they are pulled from the envp and path is parsed and stored. 
+  char **path ;
+  char **activeLine;
+  int enviroCount=0;
+  int escapeClause = 1;
+  int index=0;
+  char *directCommand;
+  char **parsedCommands;
+ printf("point 1 reached\n");
+  while(0<escapeClause) {
+      activeLine=mytok(envp[enviroCount],'=');
+      if(activeLine){
+      	if(!compare(activeLine[0],"PATH")) {
+	  printf("point 2 reached\n");	
+	  path=mytok(activeLine[1],':');
+	  escapeClause=0;
+        }
+      } else
+        escapeClause=0;
+      enviroCount++;
+      index++;
+  }
+
+
 ///////////////////////////////////////
-    printf("Automated Testing");
-    printFormatter("Hello my dog's name is Darwin.");
-    printFormatter("   Hello  World!   ");
-    printFormatter("");
-    printFormatter("      ");
-    printFormatter(" HelloWorld");
-
-    do
+// SHELL START ////////////////////////
+///////////////////////////////////////
+  do 
+  {
+    write(1,"$ ",2);
+    input = getInput();
+////////////logics of shell//////////////
+    parsedCommands=mytok(input,' ');
+    directCommand=parsedCommands[0];
+    if(compare(directCommand,"exit\0"))
+    {//if we aren't exiting
+      if(!compare(directCommand,"cd"))
+      {//if its a cd command change dir
+        int rtn=chdir(parsedCommands[1]);
+        if(rtn<0) perror("ERROR");
+      }
+      execve(directCommand,&parsedCommands[1],envp);
+      int pathIndex=0;
+      while(*path[pathIndex])
+      {
+         char *tmp=joinString(path[pathIndex],"/");
+         tmp = joinString(tmp,directCommand);
+         execve(tmp,parsedCommands,envp);
+         free(tmp);
+         pathIndex++;
+      }
+    }else
     {
-        write(1,"$ ",2);
-        input = getInput();
-        tokens = tokenize(input);
-        printf("tokens are:\n");
-        printAll(tokens);
-        continuation=compare(tokens[0],"exit\0");
+      continuation=0;
     }
-    while (continuation);
-    return EXIT_SUCCESS;
+  }while(continuation);
+  return EXIT_SUCCESS;
 }
 
 
