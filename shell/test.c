@@ -61,8 +61,7 @@ int main(int argc, char **argv,char **envp)
       enviroCount++;
       index++;
   }
-
-
+ printAll(path);
 ///////////////////////////////////////
 // SHELL START ////////////////////////
 ///////////////////////////////////////
@@ -80,9 +79,11 @@ int main(int argc, char **argv,char **envp)
         int rtn=chdir(parsedCommands[1]);
         if(rtn<0) perror("ERROR");
       }
+
       execve(directCommand,&parsedCommands[1],envp);
       int pathIndex=0;
-      while(*path[pathIndex])
+
+      while(path[pathIndex])
       {
          char *tmp=joinString(path[pathIndex],"/");
          tmp = joinString(tmp,directCommand);
@@ -90,6 +91,7 @@ int main(int argc, char **argv,char **envp)
          free(tmp);
          pathIndex++;
       }
+	printf("Command not found.\n");fflush(stdout);
     }else
     {
       continuation=0;

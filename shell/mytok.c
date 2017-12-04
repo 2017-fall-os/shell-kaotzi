@@ -175,10 +175,10 @@ int makeFree(char **input){
 int printAll(char **input){
  	int index =0;
 	fflush(stdout);
-	if(*input[0]=='\0'){
+	if(input[0]==0){
 		printf("(empty)\n");
 	}
-	while(*input[index]!='\0')
+	while(input[index]!=0)
 	{
 		printIt(input[index]);
 		index++;
