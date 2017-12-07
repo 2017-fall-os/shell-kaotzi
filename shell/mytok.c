@@ -14,6 +14,7 @@ char * copyString(char *string){
 	char * copy = (char *)malloc(length+1);
     	int index = 0;
     	while(string[index]){
+
     		copy[index] = string[index];
     		index++;
 		if(string[index]==delimit)
@@ -145,6 +146,9 @@ int index =0;
 		}else{
 			if(count==0)
 				{
+                                   while(input[index]==' '){
+                                      index++;}
+                                    
 					//printf("hi");fflush(stdout);
 					char *tmp= copyString(input+index);
 					//printIt(tmp);					
@@ -158,6 +162,7 @@ int index =0;
 	//char *nool ='\0';
 	
 toks[words]= 0;//end;
+delimit = ' ';
 return toks;
 
 }
