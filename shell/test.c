@@ -78,7 +78,7 @@ char** tmp1= mytok("      ls -ef", ' ');
   do 
   {
 /*
-this PS1 area tutored by Ricardo Alvarez. It checks if PS! has a value then uses it if it does, or sets it if it doesnt. 
+this PS1 area tutored by Ricardo Alvarez. It checks if PS1 has a value then uses it if it does, or sets it if it doesnt. 
 */
     if(getenv("PS1"))
     {
